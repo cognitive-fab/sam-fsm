@@ -1,12 +1,12 @@
 {
   "name": "@cognitive-fab/sam-fsm",
-  "version": "1.0.0",
+  "version": "2.0.0-alpha.0",
   "description": "Finite State Machine library for the SAM Pattern",
   "main": "./dist/fsm.js",
   "scripts": {
     "build": "rollup --bundleConfigAsCjs -c rollup.config.js",
     "test": "node node_modules/mocha/bin/mocha.js --require @babel/register",
-    "minify": "minify ./dist/fsm.js -d dist"
+    "minify": "terser dist/fsm.js -o dist/fsm.js -c -m"
   },
   "repository": {
     "type": "git",
@@ -28,9 +28,7 @@
   },
   "homepage": "https://github.com/jdubray/sam-fsm#readme",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
-    "@babel/node": "^7.4.5",
     "@babel/plugin-transform-async-to-generator": "^7.4.4",
     "@babel/plugin-transform-modules-umd": "^7.2.0",
     "@babel/plugin-transform-nullish-coalescing-operator": "^7.28.6",
@@ -39,24 +37,26 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.4.5",
-    "babel-eslint": "^10.0.2",
-    "babel-minify": "^0.5.1",
-    "chai": "^4.2.0",
+    "@cognitive-fab/sam-pattern": "file:../sam-lib",
     "@rollup/plugin-babel": "^7.0.0",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb": "^17.1.1",
+    "chai": "^4.2.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-babel": "^9.0.0",
     "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2",
-    "mocha": "^11.7.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.2",
+    "mocha": "^11.7.6",
     "nodemon": "^3.1.14",
     "rollup": "^4.60.0",
-    "@cognitive-fab/sam-pattern": "^1.6.0",
-    "uglify-es": "^3.3.9"
+    "terser": "^5.49.0"
   },
-  "unpkg": "dist/fsm.js"
+  "unpkg": "dist/fsm.js",
+  "overrides": {
+    "diff": "^9.0.0",
+    "serialize-javascript": "^7.0.7"
+  }
 }

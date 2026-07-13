@@ -143,14 +143,14 @@ describe('FSM extended tests', () => {
       const reactor = sm.stateMachine[0]
 
       const model = {
-        pc: 'TICKED',   // current state — used in the error message
-        pc_1: 'TOCKED', // previous state — checked against its transitions
+        pc: 'TICKED',   // current state
+        pc_1: 'TOCKED', // previous state — checked against its transitions and named in the message
         __actionName: 'TOCK', // TOCK is NOT in TOCKED.transitions (['TICK']) → error
         __stateMachineIdForLastAction: sm.id
       }
       reactor(model)()
-      // dist error message uses current state, not previous state
-      expect(model.__error).to.equal('unexpected action TOCK for state: TICKED')
+      // the message names the previous state — the state from which the action was illegal
+      expect(model.__error).to.equal('unexpected action TOCK for state: TOCKED')
     })
 
     it('should not error when there is no previous state (start state)', () => {
@@ -184,8 +184,8 @@ describe('FSM extended tests', () => {
       })
 
       const nap = sm.naps[0]
-      // dist nap returns false (comma operator: return nextAction(b), !1) when fired
-      expect(nap({ pc: 'IDLE', triggered: true })()).to.equal(false)
+      // a fired nap returns true (it blocks the render, per the nap contract)
+      expect(nap({ pc: 'IDLE', triggered: true })()).to.equal(true)
       expect(napFired).to.be.true
     })
 

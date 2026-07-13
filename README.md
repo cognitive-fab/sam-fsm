@@ -4,6 +4,33 @@
 
 The two libraries combined let you use control states where they make sense without being forced to model your entire application as a single FSM. It is too cumbersome to specify a control state for every action — `sam-fsm` + `sam-pattern` solves that problem.
 
+## v2 — sam-pattern strict-profile support
+
+Version 2.0 makes an fsm a first-class citizen of [sam-pattern 2.0's strict profile](https://github.com/jdubray/sam-lib/blob/v2/docs/MIGRATION.md). `fsm()` now additionally returns:
+
+- **`modelShape`** (#1) — the fsm's own state declaration (`pc`, plus `pc_1` marked `internal`); spread it into a strict component the way you already spread `acceptors`
+- **`namedActions(creators?)`** (#2, #3) — the FSM alphabet as a v2 named-intent map with per-action `schema` and `domain` (defaults: empty-payload creator, permissive schema, `[[]]` domain), so a bare fsm passes `validate()` and is model-checkable by the sam-pattern `checker` with zero configuration
+
+and one new option:
+
+- **`rejectUnexpectedActions: true`** (#4) — on a v2 instance, an invalid transition presents and is `reject`ed with `unexpected action X for state: Y` (observable via `lastStep()` / `stepListener`) instead of landing in the `__error` slot; on a v1 instance it falls back to `__error`
+
+```js
+const clock = fsm({ pc0: 'TICKED', actions: {...}, states: {...}, deterministic: true, enforceAllowedTransitions: true, rejectUnexpectedActions: true })
+
+instance({
+  initialState: clock.initialState({}),
+  component: {
+    modelShape: clock.modelShape,
+    actions: clock.namedActions(),
+    acceptors: clock.acceptors,
+    reactors: clock.stateMachine
+  }
+})
+```
+
+All v1 forms are unchanged.
+
 ## Table of Contents
 - [Installation](#installation)
   - [Node.js](#nodejs)
