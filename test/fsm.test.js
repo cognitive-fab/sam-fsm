@@ -168,7 +168,9 @@ describe('FSM tests', () => {
         __stateMachineIdForLastAction: clock.id
       }
       sm(model)()
-      expect(model.__error).to.equal('unexpected action TOCK for state: TICKED')
+      // the reactor validates the action against the PREVIOUS state (pc_1) —
+      // the state from which the action was illegal — and names it
+      expect(model.__error).to.equal('unexpected action TOCK for state: TOCKED')
     })
 
     it('should handle the start state case', () => {
