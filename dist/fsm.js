@@ -228,13 +228,32 @@
           model.__error = message;
         }
       };
+      // v2.1 (sam-pattern #25): on a next-state instance (strict + modelShape) the
+      // acceptor's model is a frozen pre-state and writes go to the stepApi.next
+      // draft; on v1/default instances stepApi.next is absent and writes stay
+      // in place. Reads always come from `model` (the pre-state).
+      const writeTarget = (model, stepApi) => stepApi && stepApi.next ? stepApi.next : model;
+      // the fsm speaks for its own variables: on any step where it does not
+      // assign pc/pc_1 (foreign machine's action, invalid transition kept in the
+      // __error slot) it declares them unchanged so the #25 frame check holds.
+      // Component-scoped machines write component-local state, which lives
+      // outside the instance modelShape — no framing there.
+      const frameOwnVars = stepApi => {
+        if (!componentName && stepApi && isFunction(stepApi.unchanged)) {
+          stepApi.unchanged(pc, `${pc}_1`);
+        }
+      };
       const acceptors = deterministic ? [model => (proposal, stepApi) => {
         if (!proposal.__stateMachineId || proposal.__stateMachineId === id) {
           const currentState = modelGetValue(model, componentName, pc);
           if (!enforceAllowedTransitions || enforceAllowedTransitions && specification.states[currentState].transitions.includes(proposal.__actionName)) {
-            modelSetValue(model, componentName, `${pc}_1`, currentState);
-            modelSetValue(model, componentName, pc, stateForAction(actions, proposal.__actionName));
-            updateRuntime(stateDiagram, modelGetValue(model, componentName, pc), currentState, proposal.__actionName);
+            // capture the target state: with a draft, `model` still
+            // holds the pre-state after the write (#25)
+            const nextState = stateForAction(actions, proposal.__actionName);
+            const target = writeTarget(model, stepApi);
+            modelSetValue(target, componentName, `${pc}_1`, currentState);
+            modelSetValue(target, componentName, pc, nextState);
+            updateRuntime(stateDiagram, nextState, currentState, proposal.__actionName);
           } else {
             if (composite) {
               var _composite$onState2, _composite$onState3, _composite$onState4;
@@ -245,7 +264,11 @@
             } else {
               flagUnexpected(model, stepApi, `unexpected action ${proposal.__actionName} for state: ${currentState}`);
             }
+            frameOwnVars(stepApi);
           }
+        } else {
+          // another machine's action: this machine's state is unchanged
+          frameOwnVars(stepApi);
         }
       }] : stateLabels.map(label => specification.states[label].acceptor);
       acceptors.unshift(model => proposal => {

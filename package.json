@@ -1,6 +1,6 @@
 {
   "name": "@cognitive-fab/sam-fsm",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Finite State Machine library for the SAM Pattern",
   "main": "./dist/fsm.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.4.5",
-    "@cognitive-fab/sam-pattern": "^2.0.0",
+    "@cognitive-fab/sam-pattern": "^2.1.0",
     "@rollup/plugin-babel": "^7.0.0",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",

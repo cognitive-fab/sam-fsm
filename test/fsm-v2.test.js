@@ -168,6 +168,41 @@ describe('FSM v2 strict-profile integration', () => {
       expect(model.__error).to.equal('unexpected action TICK for state: TICKED')
     })
 
+    it('should frame its own variables when another machine acts (#25 multi-machine)', async () => {
+      // two machines on one strict instance: when machine A transitions,
+      // machine B must declare its pc/pc_1 unchanged or the #25 frame
+      // check would reject the step
+      const clock = buildClock()
+      const door = fsm({
+        pc0: 'CLOSED',
+        pc: 'door',
+        actions: { OPEN: ['OPENED'], CLOSE: ['CLOSED'] },
+        states: {
+          CLOSED: { transitions: ['OPEN'] },
+          OPENED: { transitions: ['CLOSE'] }
+        },
+        deterministic: true,
+        lax: false,
+        enforceAllowedTransitions: true
+      })
+      const instance = createInstance({ strict: true, instanceName: 'v2multi' })
+      const control = instance({
+        initialState: door.initialState(clock.initialState({})),
+        component: {
+          modelShape: { ...clock.modelShape, ...door.modelShape },
+          actions: { ...clock.namedActions(), ...door.namedActions() },
+          acceptors: [...clock.acceptors, ...door.acceptors],
+          reactors: [...clock.stateMachine, ...door.stateMachine]
+        }
+      })
+
+      await control.intents.TOCK() // clock acts; door must frame door/door_1
+      expect(control.getState()).to.deep.equal({ pc: 'TOCKED', door: 'CLOSED' })
+      await control.intents.OPEN() // door acts; clock must frame pc/pc_1
+      expect(control.getState()).to.deep.equal({ pc: 'TOCKED', door: 'OPENED' })
+      expect(control.lastStep().classification).to.equal('mutated')
+    })
+
     it('should keep the __error behavior by default', async () => {
       const clock = buildClock() // rejectUnexpectedActions off
       const instance = createInstance({ strict: true, instanceName: 'v2errDefault' })
