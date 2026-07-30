@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/jdubray/sam-fsm.git"
+    "url": "git+ssh://git@github.com/cognitive-fab/sam-fsm.git"
   },
   "keywords": [
     "SAM",
@@ -24,9 +24,9 @@
   "author": "Jean-Jacques Dubray",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jdubray/sam-fsm/issues"
+    "url": "https://github.com/cognitive-fab/sam-fsm/issues"
   },
-  "homepage": "https://github.com/jdubray/sam-fsm#readme",
+  "homepage": "https://github.com/cognitive-fab/sam-fsm#readme",
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-transform-async-to-generator": "^7.4.4",

@@ -6,7 +6,7 @@ The two libraries combined let you use control states where they make sense with
 
 ## v2 — sam-pattern strict-profile support
 
-Version 2.0 makes an fsm a first-class citizen of [sam-pattern 2.0's strict profile](https://github.com/jdubray/sam-lib/blob/v2/docs/MIGRATION.md). `fsm()` now additionally returns:
+Version 2.0 makes an fsm a first-class citizen of [sam-pattern 2.0's strict profile](https://github.com/cognitive-fab/sam-lib/blob/v2/docs/MIGRATION.md). `fsm()` now additionally returns:
 
 - **`modelShape`** (#1) — the fsm's own state declaration (`pc`, plus `pc_1` marked `internal`); spread it into a strict component the way you already spread `acceptors`
 - **`namedActions(creators?)`** (#2, #3) — the FSM alphabet as a v2 named-intent map with per-action `schema` and `domain` (defaults: empty-payload creator, permissive schema, `[[]]` domain), so a bare fsm passes `validate()` and is model-checkable by the sam-pattern `checker` with zero configuration
@@ -452,7 +452,7 @@ clock.runtimeStateDiagram()
 
 - [Rocket Launcher](https://codepen.io/sam-pattern/pen/XWNGNBy)
 - [sam-fsm without sam-pattern](https://codepen.io/sam-pattern/pen/abBejoV)
-- [Unit tests](https://github.com/jdubray/sam-fsm/tree/master/test)
+- [Unit tests](https://github.com/cognitive-fab/sam-fsm/tree/master/test)
 
 ## Support
 
