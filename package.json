@@ -1,6 +1,6 @@
 {
   "name": "@cognitive-fab/sam-fsm",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Finite State Machine library for the SAM Pattern",
   "main": "./dist/fsm.js",
   "scripts": {

@@ -459,6 +459,10 @@ clock.runtimeStateDiagram()
 Please post your questions and comments on the [SAM-pattern forum](https://gitter.im/jdubray/sam).
 
 ## Change Log
+- 2.1.1   Documentation only — backfills the change log, which had stopped at 0.9.24 and carried no record of the v2 line
+- 2.1.0   Next-state (prime) compatibility with `@cognitive-fab/sam-pattern` 2.1: the deterministic acceptor writes through `stepApi.next` when present (falling back to in-place mutation on v1/default instances), captures the target state before writing, and declares `pc`/`pc_1` `unchanged` on steps the machine does not act on so multi-machine strict instances satisfy the explicit frame. Non-deterministic (user-supplied) acceptors migrate like any strict acceptor
+- 2.0.0   Strict-profile support: `fsm()` emits a `modelShape` and `namedActions(creators)`, with `schemas` and `domains` options, plus `rejectUnexpectedActions`. Verified against `@cognitive-fab/sam-pattern` 2.0. Package republished under the `@cognitive-fab` scope as `@cognitive-fab/sam-fsm`
+- 1.0.0   Fixes fragile guard-condition parsing (no longer assumes a `return` keyword); security fixes; extended test suite
 - 0.9.24  RC2 — `sam-fsm` is ready for production use
 - 0.9.23  Adds indexed actions to runtime state diagrams
 - 0.9.20  Adds support for runtime state diagrams
